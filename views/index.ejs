@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes List</title>
+    <link
+      rel="stylesheet"
+      href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css"
+    />
+  </head>
+  <body>
+    <div id="app" class="container is-max-desktop mt-5">
+      <h1 class="title">Notes List</h1>
+      <div>
+        <a href="/notes/create" class="button is-success">Add New</a>
+        <table
+          class="table is-striped is-bordered mt-3 is-fullwidth"
+          style="margin: 10px auto;"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Note</th>
+              <th>Category</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th class="has-text-centered">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% notes.forEach(el => { %>
+              <tr>
+                <td><%= el.id %></td>
+                <td><%= el.title %></td>
+                <td><%= el.note %></td>
+                <td><%= el.Category.title %></td>
+                <td><%= new Date(el.createdAt).toLocaleString() %></td>
+                <td><%= new Date(el.updatedAt).toLocaleString() %></td>
+                <td class="has-text-centered">
+                  <a href="/notes/edit/<%= el.id %>" class="button is-warning is-small">Edit</a>
+                  <button onclick="<%= 'del(' + el.id + ')' %>" class="button is-danger is-small" style="margin-left: 5px;">Delete</button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      let del = (id) => {
+        axios
+          .delete('/notes/' + id)
+          .then((result) => {
+            alert('Info status: ' + result.status);
+            location.reload();
+          })
+          .catch((err) => {
+            alert('Error: ' + err);
+          });
+      };
+    </script>
+  </body>
+</html>

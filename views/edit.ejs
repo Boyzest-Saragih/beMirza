@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REST API - MVC</title>
+    <link
+      rel="stylesheet"
+      href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css"
+    />
+  </head>
+  <body>
+    <div id="app" class="container is-max-desktop mt-5">
+      <h1 class="title">Edit Note</h1>
+
+      <div class="field">
+        <label class="label">Title</label>
+        <div class="control">
+          <input
+            type="text"
+            placeholder="Title"
+            class="input"
+            name="title"
+            id="title"
+            value="<%= note.title %>"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Note</label>
+        <div class="control">
+          <textarea placeholder="Note" class="textarea" name="note" id="note"><%= note.note %></textarea
+          >
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Category</label>
+        <div class="control">
+          <div class="select">
+            <select name="category_id" id="category_id">
+              <option value="">Select Category</option>
+              <% categories.forEach(category => { %>
+                <option value="<%= category.id %>" <%= category.id === note.category_id ? 'selected' : '' %>>
+                  <%= category.title %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+
+      <div class="control">
+        <button
+          class="button is-warning"
+          id="save"
+          onclick="<%= 'edit(' + note.id + ')' %>"
+        >
+          UPDATE
+        </button>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const edit = (id) => {
+        axios({
+          method: "put",
+          url: "/notes/" + id,
+          data: {
+            title: document.getElementById("title").value,
+            note: document.getElementById("note").value,
+            category_id: document.getElementById("category_id").value,
+          },
+        })
+          .then((result) => {
+            alert("Info status: " + result.status);
+            window.location = "/notes";
+          })
+          .catch((err) => {
+            alert("Error: " + err);
+          });
+      };
+    </script>
+  </body>
+</html>
